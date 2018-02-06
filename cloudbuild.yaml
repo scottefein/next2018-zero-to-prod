@@ -1,5 +1,17 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '.', '-f', 'Dockerfile_maven', '-t', 'maven-builder' ]
+    id: buildMavenImage
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run','-it','-d','--name', 'maven-builder-image','maven-builder']
+    id: buildMavenContainer
+    waitFor: ['buildMavenImage']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ["cp", "maven-builder-image:/usr/src/app/spring-petclinic-2.0.0.jar", "app.jar"]
+    id: cpFatJar
+    waitFor: ['buildMavenContainer']
+  - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/petclinic', '.' ]
     id: buildImage
+    waitFor: ['cpFatJar']
 images: ['gcr.io/$PROJECT_ID/petclinic:latest']

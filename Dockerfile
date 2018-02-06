@@ -1,10 +1,4 @@
-FROM maven:3.5.2-jdk-8
-WORKDIR /usr/src/java-code
-COPY . /usr/src/java-code/
-RUN mvn install
-RUN mvn package
- 
-WORKDIR /usr/src/java-app
-RUN cp /usr/src/java-code/target/spring-petclinic-2.0.0.jar app.jar
-EXPOSE 8080
+FROM openjdk:8-jre-alpine3.7
+COPY app.jar /usr/src/myapp/app.jar
+WORKDIR /usr/src/myapp
 CMD ["java", "-jar", "app.jar"]
