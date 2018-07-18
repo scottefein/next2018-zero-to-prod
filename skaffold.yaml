@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1alpha2
+kind: Config
+#Since we're using a 2 step build process to package up the app.jar in prod, this isn't used
+#build:
+#  artifacts:
+#  - imageName: gcr.io/next-2018-zero-to-prod/spring-petclinic
+#    docker:
+#      dockerfilePath: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*
+profiles:
+  - name: gcb
+    build:
+      googleCloudBuild:
+        projectId: next-2018-zero-to-prod

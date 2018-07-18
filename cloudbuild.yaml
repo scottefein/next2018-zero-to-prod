@@ -1,6 +1,6 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '.', '-f', 'Dockerfile_maven', '-t', 'maven-builder' ]
+    args: [ 'build', '.', '-f', 'DockerMavenBuilder', '-t', 'maven-builder' ]
     id: buildMavenImage
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run','-it','-d','--name', 'maven-builder-image','maven-builder']
@@ -14,4 +14,6 @@ steps:
     args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/petclinic', '.' ]
     id: buildImage
     waitFor: ['cpFatJar']
+  - name: 'gcr.io/cloud-builders/skaffold'
+    args: ['run']
 images: ['gcr.io/$PROJECT_ID/petclinic:latest']
