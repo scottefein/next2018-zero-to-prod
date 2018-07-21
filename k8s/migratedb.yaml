@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migratedb
+spec:
+  template:
+    metadata:
+      name: migratedb
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: migratedb
+        image: us.gcr.io/next-2018-zero-to-prod/spring-petclinic:latest
+        imagePullPolicy: Always
+        command: ['echo','runsometests']
