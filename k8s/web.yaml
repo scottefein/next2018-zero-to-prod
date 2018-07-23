@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
       - name: petclinic
-        image: us.gcr.io/next-2018-zero-to-prod/spring-petclinic:latest
+        image: gcr.io/next-2018-zero-to-prod/petclinic:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
-          - name: SPRING_USER_PASSWORD
+          - name: SPRING_DATASOURCE_USERNAME
             valueFrom:
               secretKeyRef:
                 name: cloudsql-db-credentials

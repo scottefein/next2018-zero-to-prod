@@ -10,6 +10,6 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: migratedb
-        image: us.gcr.io/next-2018-zero-to-prod/spring-petclinic:latest
+        image: gcr.io/next-2018-zero-to-prod/petclinic:latest
         imagePullPolicy: Always
-        command: ['echo','runsometests']
+        command: ['echo','migrate some stuff']
