@@ -10,26 +10,26 @@ steps:
     id: 'deleteMigrateJob'
     waitFor: ['copyAssetsToBucket']
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply','-f','k8s/migratedb.yaml']
     id: 'createMigrateJob'
     waitFor: ['deleteMigrateJob']
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
   - name: gcr.io/$PROJECT_ID/kubectl_wait_for_job
     args: ['migratedb']
     waitFor: ['createMigrateJob']
     id: 'waitForMigrate'
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set','image','deployment/petclinic','petclinic=gcr.io/$PROJECT_ID/petclinic:${_DEPLOY_TAG}']
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+    - 'CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER'
     waitFor: ['waitForMigrate']
 images: ['gcr.io/$PROJECT_ID/petclinic:$SHORT_SHA','gcr.io/$PROJECT_ID/petclinic:${_DEPLOY_TAG}']
