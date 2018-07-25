@@ -26,4 +26,10 @@ steps:
     env:
     - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
     - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set','image','deployment/petclinic','petclinic=gcr.io/$PROJECT_ID/petclinic:latest']
+    env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+    waitFor: ['waitForMigrate']
 images: ['gcr.io/$PROJECT_ID/petclinic:latest']
