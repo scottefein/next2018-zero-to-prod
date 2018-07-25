@@ -5,4 +5,18 @@ steps:
   - name: gcr.io/cloud-builders/gsutil
     args: ['cp','-r','public/assets', 'gs://petclinic-assets-bucket/']
     id: 'copyAssetsToBucket'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['delete','-f','k8s/migratedb.yaml']
+    id: 'deleteMigrateJob'
+    waitFor: ['copyAssetsToBucket']
+    env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply','-f','k8s/migratedb.yaml']
+    id: 'createMigrateJob'
+    waitFor: ['deleteMigrateJob']
+    env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=scotts-pet-clinic'
 images: ['gcr.io/$PROJECT_ID/petclinic:latest']
